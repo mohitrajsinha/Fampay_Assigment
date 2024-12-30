@@ -11,8 +11,6 @@ class HC5Widget extends StatefulWidget {
 class _HC5WidgetState extends State<HC5Widget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Image.network(widget.bgImage, fit: BoxFit.cover),
-    );
+    return Image.network(widget.bgImage, fit: BoxFit.cover);
   }
 }

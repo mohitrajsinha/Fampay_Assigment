@@ -8,13 +8,13 @@ class HC9Card extends StatelessWidget {
   final double aspectRatio;
 
   const HC9Card({
-    Key? key,
+    super.key,
     required this.hexGradientColors,
     required this.height,
     required this.imageUrl,
     required this.aspectRatio,
     this.angle = 0, // Default angle is 0 degrees
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,11 @@ class HC9Card extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: hexGradientColors
               .map((color) => Color(int.parse(color.replaceAll('#', '0xff'))))
+              .toList()
+              .reversed
               .toList(),
           transform: GradientRotation(
-              angle * 3.14159 / 180), // Converting degrees to radians
+              angle * 3.14159 / 180), 
         ),
       ),
       child: ClipRRect(
@@ -47,6 +49,4 @@ class HC9Card extends StatelessWidget {
       ),
     );
   }
-
- 
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/card_model.dart';
+
+import '../models/models.dart';
 
 class ApiService {
   static const String apiUrl =
@@ -10,11 +11,10 @@ class ApiService {
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
-        // Decode the JSON response
         var jsonData = json.decode(response.body);
         return List<ApiData>.from(
           jsonData.map((x) => ApiData.fromJson(x)),
-        ); // Parse all items in the list and return
+        ); 
       } else {
         throw Exception('Failed to load cards');
       }

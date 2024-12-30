@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:fampay_assignment/widgets/hc1_widget.dart';
 import 'package:fampay_assignment/widgets/hc3_widget.dart';
 import 'package:fampay_assignment/widgets/hc5_widget.dart';
 import 'package:fampay_assignment/widgets/hc6_widget.dart';
 import 'package:fampay_assignment/widgets/hc9_widget.dart';
-import 'package:flutter/material.dart';
+import '../models/models.dart';
 import '../utils/api_service.dart';
-import '../models/card_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,26 +25,49 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Image.asset('assets/fampaylogo.png', height: 30),
-        centerTitle: true,
-      ),
-      body: FutureBuilder<List<ApiData>>(
-        future: _futureCards,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No cards available.'));
-          }
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _futureCards = ApiService.fetchCards();
+        });
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Image.asset('assets/fampaylogo.png', height: 30),
+          centerTitle: true,
+        ),
+        body: FutureBuilder<List<ApiData>>(
+          future: _futureCards,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Failed to load cards.'),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _futureCards = ApiService.fetchCards();
+                        });
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              );
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No cards available.'));
+            }
 
-          final cards = snapshot.data!;
-          return _buildCardList(cards);
-        },
+            final cards = snapshot.data!;
+            return _buildCardList(cards);
+          },
+        ),
       ),
     );
   }
@@ -105,10 +128,15 @@ class _HomeScreenState extends State<HomeScreen> {
         titleFontSize: card.formattedTitle?.entities[0].fontSize ?? 14,
         descriptionFontSize: card.formattedTitle?.entities[1].fontSize ?? 16,
         titleColor: card.formattedTitle?.entities[0].color,
-        descriptionColor: card.formattedTitle?.entities[0].color,
+        descriptionColor: card.formattedTitle?.entities[1].color,
         cta: card.cta?.isNotEmpty == true ? card.cta![0] : null,
         bgImage: card.bgImage!,
         url: card.url,
+        titleFontFamily: card.formattedTitle?.entities[0].fontFamily ?? '',
+        descriptionFontFamily:
+            card.formattedTitle?.entities[1].fontFamily ?? '',
+        titleFontStyle: card.formattedTitle?.entities[0].fontStyle ?? '',
+        descriptionFontStyle: card.formattedTitle?.entities[1].fontStyle ?? '',
       ),
     );
   }
@@ -159,13 +187,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHC1Card(HcGroup group, ContextualCard card) {
     return HC1Widget(
-      imageUrl: card.icon!.imageUrl,
       height: group.height!,
-      title: card.formattedTitle!.entities[0].text!,
-      description: card.formattedDescription!.entities[0].text!,
-      titleColor: card.formattedTitle!.entities[0].color!,
-      descriptionColor: card.formattedDescription!.entities[0].color!,
       bgColor: card.bgColor!,
+      cards: group.cards,
+      isScrollable:
+          group.isScrollable, 
     );
   }
 }
