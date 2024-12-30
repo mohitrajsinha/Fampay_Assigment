@@ -20,7 +20,7 @@ An Android app that dynamically renders contextual cards fetched from an API. Th
 
 ### APK File Path
 ```bash
-fampay-assignment\build\app\outputs\flutter-apk\app-release.apk
+fampay_assigment/assets/apk/app-release.apk
 ```
 
 
