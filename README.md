@@ -40,7 +40,9 @@ The project uses the following dependencies:
 ---
 
 ## 📸 Screenshots
-![Screenshot_1735595793](https://github.com/user-attachments/assets/d844285c-d38d-4d9c-9790-35dee84ff4e9)
- ![Screenshot_1735![Screenshot_1735595816](https://github.com/user-attachments/assets/c2830cc1-752d-41da-bf56-e26dc33cabce)
-595801](https://github.com/user-attachments/assets/55d84766-feab-4e18-8973-18b3e52c6e0d)
- 
+<p> <img src="https://github.com/user-attachments/assets/d844285c-d38d-4d9c-9790-35dee84ff4e9" width="300" hspace="10"/> <img src="https://github.com/user-attachments/assets/c2830cc1-752d-41da-bf56-e26dc33cabce" width="300" hspace="10"/><img src= "https://github.com/user-attachments/assets/b11ff56d-787f-477f-bddf-82d9faf0fb84" width="300"/> </p>
+
+
+
+
+---
