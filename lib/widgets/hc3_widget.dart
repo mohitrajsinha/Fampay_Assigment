@@ -54,75 +54,21 @@ class _HC3WidgetState extends State<HC3Widget> {
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            // height: widget.height.toDouble(),
             width: _longPressed ? width / 3 : 0,
             decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    bottomLeft: Radius.circular(15))),
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    // Handle long press actions if needed
-                  },
-                  child: Container(
-                    width: width / 4,
-                    height: width / 4,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffF7F6F3),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.notifications,
-                            color: Colors.amberAccent,
-                            size: width / 8,
-                          ),
-                          Text(
-                            "Remind later",
-                            style: TextStyle(fontSize: width / 30),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Handle long press actions if needed
-                  },
-                  child: Container(
-                    width: width / 4,
-                    height: width / 4,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffF7F6F3),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.disabled_by_default_rounded,
-                          color: Colors.amberAccent,
-                          size: width / 8,
-                        ),
-                        Text(
-                          "Dismiss now",
-                          style: TextStyle(fontSize: width / 30),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ),
-                )
+                _buildActionCard("Remind later", Icons.notifications),
+                const SizedBox(height: 10),
+                _buildActionCard(
+                    "Dismiss now", Icons.disabled_by_default_rounded),
               ],
             ),
           ),
@@ -139,13 +85,11 @@ class _HC3WidgetState extends State<HC3Widget> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: widget.height.toDouble() / 4,
-                    ),
+                    SizedBox(height: widget.height.toDouble() / 4),
                     Text(
                       widget.title,
                       style: TextStyle(
@@ -166,16 +110,14 @@ class _HC3WidgetState extends State<HC3Widget> {
                       ),
                     ),
                     Text(
-                      widget.description != ''
+                      widget.description?.isNotEmpty ?? false
                           ? widget.description!
                           : "This is a sample text for the subtitle that you can add to contextual cards",
                       style: TextStyle(
                         fontSize: widget.descriptionFontSize.toDouble(),
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    // const SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: () async {
                         try {
@@ -195,7 +137,9 @@ class _HC3WidgetState extends State<HC3Widget> {
                         ),
                       ),
                       child: Text(
-                        widget.cta!.text.isEmpty ? 'Action' : widget.cta!.text,
+                        widget.cta?.text.isEmpty ?? true
+                            ? 'Action'
+                            : widget.cta!.text,
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
@@ -205,6 +149,41 @@ class _HC3WidgetState extends State<HC3Widget> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionCard(String label, IconData icon) {
+    var width = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () {
+        // Handle action tap if needed
+      },
+      child: Container(
+        width: width / 4,
+        height: width / 4,
+        decoration: BoxDecoration(
+          color: const Color(0xffF7F6F3),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(
+                icon,
+                color: Colors.amberAccent,
+                size: width / 8,
+              ),
+              Text(
+                label,
+                style: TextStyle(fontSize: width / 30),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
